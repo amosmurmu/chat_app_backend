@@ -2,7 +2,9 @@ import { generateToken } from '../lib/util.js';
 import User from '../models/user.model.js';
 import bycrypt from 'bcryptjs';
 import cloudinary from '../lib/cloudinary.js';
-
+import multer from 'multer';
+// Setup multer to handle file upload
+const upload = multer({ dest: 'uploads/' });
 export const signup = async (req, res) => {
   const { fullName, email, password } = req.body;
   try {
@@ -89,13 +91,16 @@ export const logout = (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const { profilePic } = req.body;
+    console.log(req.file);
+    const file = req.file;
     const userId = req.user._id;
-    if (!profilePic) {
+    if (!file) {
       return res.status(400).json({ message: 'Profile pic is required' });
     }
 
-    const uploadResponse = await cloudinary.uploader.upload(profilePic);
+    const uploadResponse = await cloudinary.uploader.upload(file.path, {
+      folder: 'profile_pics', // Optional folder in Cloudinary
+    });
 
     const updatedUser = await User.findByIdAndUpdate(
       userId,
