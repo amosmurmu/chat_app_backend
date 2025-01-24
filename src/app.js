@@ -14,7 +14,7 @@ import path from "path";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 dotenv.config();
-
+const test = path.resolve();
 const PORT = process.env.PORT || 3000;
 // console.log(__dirname);
 // view engine setup
@@ -37,12 +37,16 @@ app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, ".../frontend/dist/")));
+  app.use(express.static(path.join(test, "../frontend/dist/")));
 
   app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, ".../frontend", "dist", "index.html"));
+    res.sendFile(path.join(test, "../frontend", "dist", "index.html"));
   });
 }
+
+// console.log("__dirname:", __dirname);
+// console.log("Static files served from:", path.join(test, "../frontend/dist"));
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
