@@ -18,7 +18,7 @@ dotenv.config();
 const PORT = process.env.PORT || 3000;
 // console.log(__dirname);
 // view engine setup
-app.set("views", join(__dirname, "src/views"));
+app.set("views", join(__dirname, "/views"));
 app.set("view engine", "pug");
 
 app.use(logger("dev"));
